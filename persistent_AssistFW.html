@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assist Framework – GenAI Conversational Analytics Chatbot</title>
+  <style>
+    :root {
+      --primary: #1f3a5f;
+      --accent: #2e75b6;
+      --light: #eef4fa;
+      --text: #222;
+      --muted: #555;
+      --border: #d0d7e2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 10.5pt;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 36px;
+      background: #fff;
+    }
+    h1 { color: var(--primary); font-size: 20pt; margin: 0 0 4px; }
+    .meta {
+      color: var(--muted);
+      padding-bottom: 8px;
+      margin-bottom: 6px;
+      border-bottom: 3px solid var(--accent);
+    }
+    .meta strong { color: var(--primary); }
+    h2 {
+      color: var(--primary);
+      font-size: 13pt;
+      margin: 22px 0 8px;
+      padding-left: 8px;
+      border-left: 4px solid var(--accent);
+    }
+    h3 { color: var(--accent); font-size: 11pt; margin: 14px 0 6px; }
+    p { margin: 6px 0; }
+    ul, ol { margin: 6px 0 6px 20px; padding: 0; }
+    li { margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 10pt; }
+    th { background: var(--primary); color: #fff; text-align: left; padding: 7px 9px; }
+    td { padding: 6px 9px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    tr:nth-child(even) td { background: var(--light); }
+    tr.highlight td { background: #fff4d6; font-weight: 600; }
+    .callout {
+      background: var(--light);
+      border-left: 4px solid var(--accent);
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-style: italic;
+    }
+    .guardrail {
+      background: #fdf0ef;
+      border-left: 4px solid #c0504d;
+      padding: 10px 14px;
+      margin: 10px 0;
+    }
+    /* Estimated values: verify and replace with your real figures */
+    .est { background: #ffe97a; padding: 0 2px; border-radius: 2px; }
+    .est-note {
+      background: #fff8d0;
+      border: 1px dashed #c9a400;
+      padding: 8px 12px;
+      margin: 10px 0;
+      font-size: 9.5pt;
+    }
+    section { page-break-inside: avoid; }
+    @media print {
+      body { padding: 0; font-size: 10pt; }
+      h2 { margin-top: 16px; }
+      .est { background: none; padding: 0; }
+      .est-note { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Assist Framework – GenAI Conversational Analytics Chatbot for MS Teams</h1>
+  <div class="meta">
+    <strong>Persistent Systems</strong> &nbsp;|&nbsp; GenAI Engineer &nbsp;|&nbsp; 04/2024 – 09/2025
+  </div>
+
+  <div class="est-note">
+    <strong>Note (hidden when printed):</strong> Highlighted items are estimates or assumed tools. Replace each one with your real figure, or remove it, before you use this document.
+  </div>
+
+  <section>
+    <h2>Project Overview</h2>
+    <p>Built and deployed an enterprise GenAI chatbot inside Microsoft Teams. Finance and business users ask questions in plain English and get answers from the data warehouse in seconds. The bot turns each question into SQL, runs it on Azure Synapse and returns a short, business-friendly summary with the supporting data. Users no longer need to write SQL or wait for a BI report.</p>
+    <p>The platform serves <span class="est">~350</span> users across <span class="est">6</span> business units. It handles <span class="est">~1,200</span> queries per week, with role-based and row-level security on every request.</p>
+  </section>
+
+  <section>
+    <h2>Key Features</h2>
+    <ul>
+      <li><strong>Natural language to SQL:</strong> Converts plain-English questions into valid Synapse SQL across <span class="est">45+</span> tables and views in <span class="est">8</span> finance subject areas.</li>
+      <li><strong>RAG-grounded answers:</strong> Retrieves schema details, KPI definitions and a finance glossary from a vector index. This keeps answers correct for domain terms such as "net revenue" or "YTD variance".</li>
+      <li><strong>Native Teams experience:</strong> Adaptive Cards show summaries, data tables and follow-up suggestions. Users need no new tool or separate login.</li>
+      <li><strong>Enterprise security:</strong> RBAC through Microsoft Entra ID groups, plus row-level security (RLS) in Synapse, so each user sees only their own data.</li>
+      <li><strong>SQL safety guardrails:</strong> SELECT-only enforcement, allow-listed tables, row limits and query validation before execution.</li>
+      <li><strong>Conversation memory:</strong> Keeps context across turns, so users can ask follow-ups such as "Now split that by region."</li>
+      <li><strong>Automated delivery:</strong> CI/CD with GitHub Actions deploys to Azure Web App through dev, test and production environments.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Technology &amp; Tools</h2>
+    <table>
+      <tr><th>Area</th><th>Tools</th></tr>
+      <tr><td>LLM &amp; orchestration</td><td>Azure OpenAI (<span class="est">GPT-4o</span>, <span class="est">text-embedding-3</span>), LangChain</td></tr>
+      <tr><td>Bot &amp; channel</td><td>Azure Bot Service, MS Teams Bot Framework SDK, Adaptive Cards</td></tr>
+      <tr><td>Data</td><td>Azure Synapse Analytics (SQL, RLS)</td></tr>
+      <tr><td>Retrieval (RAG)</td><td><span class="est">Azure AI Search</span> (vector + keyword hybrid search)</td></tr>
+      <tr><td>Security</td><td>Microsoft Entra ID (RBAC), <span class="est">Azure Key Vault</span></td></tr>
+      <tr><td>Hosting &amp; DevOps</td><td>Azure Web App, GitHub, GitHub Actions (CI/CD)</td></tr>
+      <tr><td>Monitoring</td><td><span class="est">Azure Application Insights</span></td></tr>
+      <tr><td>Language</td><td>Python</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Problem Statement</h2>
+    <p>Finance and business users depended on analysts for most data questions. Simple requests, such as "What was Q2 spend by region?", went into a queue and took <span class="est">1–3 days</span>. Analysts spent a large part of their week on repeat ad-hoc queries instead of deep analysis. Self-service BI dashboards did not cover every question, and most business users could not write SQL. Any AI solution also had to meet strict rules on data access, so users could see only the data they were allowed to see.</p>
+  </section>
+
+  <section>
+    <h2>Solution Approach</h2>
+    <ol>
+      <li><strong>Requirements &amp; data mapping:</strong> Worked with finance stakeholders to collect the top <span class="est">150</span> real business questions. Mapped them to Synapse tables, joins and KPI definitions.</li>
+      <li><strong>Knowledge layer (RAG):</strong> Indexed table schemas, column descriptions, KPI formulas, a business glossary and sample question-SQL pairs as embeddings. Retrieved only the relevant context for each question to keep prompts small and accurate.</li>
+      <li><strong>Text-to-SQL pipeline:</strong> Built a LangChain chain: classify intent → retrieve context → generate SQL → validate → execute → summarize. Used few-shot prompts and schema-aware instructions to cut wrong joins and invented columns.</li>
+      <li><strong>Validation &amp; self-correction:</strong> Checked each query for syntax and safety before it ran. On an error, the bot sent the error back to the LLM for one automatic fix attempt.</li>
+      <li><strong>Security:</strong> Mapped Entra ID groups to bot roles (RBAC). Passed the user's identity to Synapse so RLS filters every result at the database level.</li>
+      <li><strong>Teams integration:</strong> Built the bot on the Bot Framework. Returned answers as Adaptive Cards with a summary, a data table and suggested follow-up questions.</li>
+      <li><strong>Deployment &amp; operations:</strong> Hosted on Azure Web App. Automated build, test and deploy with GitHub Actions. Logged latency, token use, failures and user feedback in Application Insights.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Results &amp; Business Impact</h2>
+    <table>
+      <tr><th>Metric</th><th>Result</th><th>Business meaning</th></tr>
+      <tr><td>Text-to-SQL accuracy</td><td><strong><span class="est">~88%</span></strong> on a <span class="est">300</span>-question test set (from <span class="est">~62%</span> baseline)</td><td>Most questions get a correct answer on the first try</td></tr>
+      <tr><td>Time to answer</td><td><strong><span class="est">1–3 days → ~8 seconds</span></strong> (median)</td><td>Decisions no longer wait for an analyst queue</td></tr>
+      <tr><td>Ad-hoc analyst requests</td><td><strong><span class="est">~40%</span></strong> reduction</td><td>Analysts get time back for higher-value work</td></tr>
+      <tr><td>Analyst hours saved</td><td><strong><span class="est">~120 hours</span></strong> per month</td><td>Direct productivity gain for the finance team</td></tr>
+      <tr><td>Adoption</td><td><strong><span class="est">~350</span></strong> users, <span class="est">~1,200</span> queries per week</td><td>Became part of daily work across business units</td></tr>
+      <tr><td>User satisfaction</td><td><strong><span class="est">4.3 / 5</span></strong> average feedback score</td><td>Users trust and prefer the tool</td></tr>
+      <tr><td>Deployment time</td><td><strong><span class="est">~2 hours → ~15 minutes</span></strong> with CI/CD</td><td>Faster, safer releases with fewer manual errors</td></tr>
+      <tr><td>Data access incidents</td><td><strong>Zero</strong> unauthorized data exposures</td><td>RBAC and RLS met security and compliance needs</td></tr>
+    </table>
+
+    <h3>Business Value</h3>
+    <ul>
+      <li><strong>Self-service data for everyone:</strong> Non-technical users get answers without SQL skills or BI training.</li>
+      <li><strong>Faster decisions:</strong> Answers in seconds instead of days support quicker budget and spend decisions.</li>
+      <li><strong>Lower analyst workload:</strong> Repeat questions move to the bot, so analysts focus on deeper analysis.</li>
+      <li><strong>Secure by design:</strong> Enterprise-grade access control made the tool approvable for sensitive finance data.</li>
+      <li><strong>Reusable framework:</strong> The design can extend to new data domains with new index content and prompts, not new code.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Related Deliverable in the Same Role</h2>
+    <ul>
+      <li><strong>Customer Sentiment &amp; Opportunity Analyzer:</strong> Built and deployed a GenAI tool that reads past client communications and produces sentiment scores, key risks and upsell opportunities. Processed <span class="est">~25K</span> emails and meeting notes and cut account review prep from <span class="est">~3 hours to ~20 minutes</span> per account.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Challenges</h2>
+    <ul>
+      <li><strong>LLM hallucinations in SQL:</strong> The model sometimes invented columns or joins. Fixed with schema-aware RAG, few-shot examples and a validate-then-retry loop.</li>
+      <li><strong>Business terms vs. column names:</strong> Users say "margin" while tables say <code>gross_profit_pct</code>. Solved with a glossary and KPI definitions in the retrieval index.</li>
+      <li><strong>Data security:</strong> The bot must never show data a user cannot see. Passed user identity through to Synapse RLS, so security is enforced in the database, not only in the prompt.</li>
+      <li><strong>Latency:</strong> Long prompts slowed answers. Cut context size by retrieving only relevant schema parts, which kept median response time near <span class="est">8 seconds</span>.</li>
+      <li><strong>Token cost:</strong> Reduced cost with smaller prompts and caching of repeat questions, lowering token use by about <span class="est">30%</span>.</li>
+      <li><strong>Ambiguous questions:</strong> Added clarifying follow-up prompts, for example "Do you mean fiscal or calendar year?", instead of guessing.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Positioning: Where the Product Fits in the Business</h2>
+
+    <h3>Business Context</h3>
+    <p>Finance and business teams make daily decisions on spend, revenue and performance. The data lives in Azure Synapse, but access depended on analysts and BI reports. The Assist Framework sits between users and the data warehouse as a secure, conversational access layer inside the tool they already use every day: Microsoft Teams.</p>
+
+    <h3>Place in the Data-to-Decision Workflow</h3>
+    <table>
+      <tr><th>Step</th><th>What happens</th><th>Product's role</th></tr>
+      <tr><td>1. Data sources</td><td>Finance, marketing and ERP data load into the warehouse</td><td>Source of truth</td></tr>
+      <tr><td>2. Data warehouse</td><td>Azure Synapse stores curated tables with RLS rules</td><td>Queried directly and securely</td></tr>
+      <tr><td>3. Business question</td><td>A user asks a question in Teams</td><td>Single entry point, no new tool</td></tr>
+      <tr class="highlight"><td>4. AI answer layer</td><td>Bot retrieves context, writes SQL, runs it and summarizes</td><td>Turns questions into trusted answers in seconds</td></tr>
+      <tr><td>5. Security check</td><td>RBAC and RLS filter the result for that user</td><td>Only allowed data is shown</td></tr>
+      <tr><td>6. Decision</td><td>User acts on the summary or shares it</td><td>Faster, data-backed decisions</td></tr>
+      <tr><td>7. Feedback</td><td>Ratings and failed queries are logged</td><td>Improves prompts and the knowledge index</td></tr>
+    </table>
+
+    <h3>Who Uses the Output</h3>
+    <ul>
+      <li><strong>Finance managers and business users:</strong> Get instant answers on spend, revenue and variance.</li>
+      <li><strong>Leadership:</strong> Get quick KPI checks without waiting for reports.</li>
+      <li><strong>Data analysts:</strong> Spend less time on repeat requests and more on deep analysis.</li>
+      <li><strong>IT and security teams:</strong> Get a governed, auditable way to give data access.</li>
+    </ul>
+
+    <h3>Strategic Value</h3>
+    <ul>
+      <li>Moves the organization from <strong>analyst-dependent reporting</strong> to <strong>secure self-service analytics</strong>.</li>
+      <li>Shows a <strong>production-grade, governed GenAI pattern</strong> that the company can reuse for other domains.</li>
+      <li>Increases the value of the existing Azure and Teams investment without new user licenses.</li>
+    </ul>
+
+    <div class="guardrail">
+      <strong>Guardrails:</strong> The bot runs read-only queries on allow-listed tables. It shows the SQL on request for transparency. Security is enforced in the database through RLS, not only in the prompt.
+    </div>
+  </section>
+
+  <!--<section>
+    <h2>Resume-Ready Bullets</h2>
+    <h3>One-liner</h3>
+    <div class="callout">
+      Built a production GenAI text-to-SQL chatbot in MS Teams using Azure OpenAI, LangChain and RAG on Azure Synapse. It serves <span class="est">~350</span> users with <span class="est">~88%</span> query accuracy and cut answer time from days to seconds.
+    </div>
+    <h3>Bullets</h3>
+    <ul>
+      <li>Built and deployed a GenAI finance chatbot on the MS Teams Bot Framework that converts natural language into Synapse SQL, serving <span class="est">~350</span> users and <span class="est">~1,200</span> queries per week.</li>
+      <li>Raised text-to-SQL accuracy from <span class="est">~62%</span> to <span class="est">~88%</span> using RAG over schema, KPI and glossary content, few-shot prompting and a validate-and-retry loop.</li>
+      <li>Implemented RBAC with Entra ID and row-level security in Synapse, delivering zero unauthorized data exposures.</li>
+      <li>Cut ad-hoc analyst requests by <span class="est">~40%</span>, saving about <span class="est">120</span> analyst hours per month.</li>
+      <li>Automated deployment to Azure Web App with GitHub Actions CI/CD, reducing release time from <span class="est">~2 hours to ~15 minutes</span>.</li>
+      <li>Built a GenAI sentiment and opportunity analyzer for client communications, cutting account review prep from <span class="est">~3 hours to ~20 minutes</span>.</li>
+    </ul>
+  </section>-->
+
+</body>
+</html>

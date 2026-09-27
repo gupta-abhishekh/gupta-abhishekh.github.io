@@ -1,1 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Carrier Provider FWA Risk-Ranking Model</title>
+  <style>
+    :root {
+      --primary: #1f3a5f;
+      --accent: #2e75b6;
+      --light: #eef4fa;
+      --text: #222;
+      --muted: #555;
+      --border: #d0d7e2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 10.5pt;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 36px;
+      background: #fff;
+    }
+    h1 {
+      color: var(--primary);
+      font-size: 20pt;
+      margin: 0 0 6px;
+      padding-bottom: 8px;
+      border-bottom: 3px solid var(--accent);
+    }
+    h2 {
+      color: var(--primary);
+      font-size: 13pt;
+      margin: 22px 0 8px;
+      padding-left: 8px;
+      border-left: 4px solid var(--accent);
+    }
+    h3 {
+      color: var(--accent);
+      font-size: 11pt;
+      margin: 14px 0 6px;
+    }
+    p { margin: 6px 0; }
+    ul, ol { margin: 6px 0 6px 20px; padding: 0; }
+    li { margin-bottom: 4px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0 12px;
+      font-size: 10pt;
+    }
+    th {
+      background: var(--primary);
+      color: #fff;
+      text-align: left;
+      padding: 7px 9px;
+    }
+    td {
+      padding: 6px 9px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: var(--light); }
+    tr.highlight td {
+      background: #fff4d6;
+      font-weight: 600;
+    }
+    .callout {
+      background: var(--light);
+      border-left: 4px solid var(--accent);
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-style: italic;
+    }
+    .guardrail {
+      background: #fdf0ef;
+      border-left: 4px solid #c0504d;
+      padding: 10px 14px;
+      margin: 10px 0;
+    }
+    section { page-break-inside: avoid; }
+    @media print {
+      body { padding: 0; font-size: 10pt; }
+      h2 { margin-top: 16px; }
+    }
+  </style>
+</head>
+<body>
 
+  <h1>Multi-Carrier Provider Fraud, Waste &amp; Abuse (FWA) Risk-Ranking Model</h1>
+
+  <section>
+    <h2>Project Overview</h2>
+    <p>Built an explainable machine learning model that ranks medical billing providers by fraud, waste and abuse risk in auto casualty claims. The model compares each provider's 5-year billing behavior with the behavior of providers already flagged by the Special Investigations Unit (SIU). For each provider, it gives investigators a prioritized worklist with three outputs:</p>
+    <ul>
+      <li>A risk probability</li>
+      <li>A risk tier (High / Elevated / Low / No Risk)</li>
+      <li>The <strong>10 strongest reasons</strong> behind the score</li>
+    </ul>
+    <p>The model uses <strong>~806M bill lines</strong> from many insurance carriers. This gives a view of each provider across payers that no single carrier can get from its own data.</p>
+  </section>
+
+  <section>
+    <h2>Key Features</h2>
+    <ul>
+      <li><strong>Cross-carrier view:</strong> Profiles 377K+ providers at the Tax ID (TIN) level across 90+ client accounts.</li>
+      <li><strong>Explainable scores:</strong> SHAP reason codes show the feature value, the direction of its effect and its share of the score.</li>
+      <li><strong>Action-ready tiers:</strong> Probabilities map to review tiers for simple triage and workload planning.</li>
+      <li><strong>Production pipeline:</strong> Monthly rebuild, model registry with version aliases, run logging and 7 automated output checks.</li>
+      <li><strong>Gated promotion:</strong> A new model replaces the current "champion" only if held-out PR-AUC stays within tolerance.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Technology &amp; Tools</h2>
+    <table>
+      <tr><th>Area</th><th>Tools</th></tr>
+      <tr><td>Data platform</td><td>Snowflake (SQL, Notebooks, Workspace, Model Registry)</td></tr>
+      <tr><td>Language</td><td>Python</td></tr>
+      <tr><td>ML algorithms</td><td>XGBoost (final), LightGBM, HistGradientBoosting, Random Forest, Logistic Regression</td></tr>
+      <tr><td>Explainability</td><td>SHAP</td></tr>
+      <tr><td>Methods</td><td>Stratified sampling, feature engineering, collinearity pruning, stratified 5-fold CV, randomized hyperparameter search</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Problem Statement</h2>
+    <p>Fraud reviews were mostly manual and reactive. Suspicious billing was often found only after large payments had gone out. Investigators had limited capacity and no objective way to decide which providers to review first. Sophisticated providers also bill across many carriers, so single-payer tools cannot see their full pattern.</p>
+  </section>
+
+  <section>
+    <h2>Solution Approach</h2>
+    <ol>
+      <li><strong>Data design:</strong> Extracted and validated bill-line data in Snowflake. Chose the provider TIN as the row level because the NPI was missing for 33% of providers and the SIU opens cases by TIN.</li>
+      <li><strong>Label construction:</strong> Kept all 7,507 SIU-flagged providers. Drew a stratified "not-flagged" sample of 71,837 providers by customer, provider type and claim volume. Removed suspected offenders in two steps, including public OIG/state fraud lists.</li>
+      <li><strong>Feature engineering:</strong> Built <strong>203 behavioral features</strong> in 15 groups, such as volume, pricing, procedure repetition, geography, attorney involvement and timing. Turned high-cardinality codes into share, diversity and concentration measures.</li>
+      <li><strong>Feature selection:</strong> Used missing-value, constant-value and collinearity rules, then tested <strong>17 feature-set configurations</strong>. This cut the model to <strong>104 features</strong> that investigators can check against the bill history.</li>
+      <li><strong>Modeling:</strong> Compared 5 algorithm families at the same capacity. Chose XGBoost and tuned it with a guard that rejected overfit configurations. Handled the 9.6:1 class imbalance with class weights instead of SMOTE, so the probabilities used for the tiers stay reliable.</li>
+      <li><strong>Deployment:</strong> Refit on all labelled data, registered the model in Snowflake, scored <strong>298K unlabeled providers</strong> and wrote reason codes to a scores table.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Results &amp; Business Impact</h2>
+    <table>
+      <tr><th>Metric</th><th>Result</th><th>Business meaning</th></tr>
+      <tr><td>PR-AUC</td><td><strong>0.758</strong> (8× the 0.095 no-model floor)</td><td>Finds flagged providers far better than chance</td></tr>
+      <tr><td>ROC-AUC</td><td><strong>0.951</strong></td><td>Ranks a flagged provider above a clean one 95% of the time</td></tr>
+      <tr><td>Top-decile hit rate</td><td><strong>68.8%</strong> (7.3× lift)</td><td>About 2 of every 3 top-ranked providers are real leads, against 1 in 10 without the model</td></tr>
+      <tr><td>Top-decile capture</td><td><strong>72.8%</strong> of all flagged providers</td><td>Reviewing 10% of providers finds about 3 of every 4 bad actors</td></tr>
+      <tr><td>Top-20% capture</td><td><strong>89.5%</strong></td><td>A queue of 20% of providers catches about 9 in 10</td></tr>
+      <tr><td>Bottom-50% leakage</td><td><strong>2.2%</strong> of flagged providers</td><td>Half of all providers can safely get lower priority</td></tr>
+      <tr><td>vs. prior champion</td><td><strong>+5.5%</strong> PR-AUC (0.719 → 0.758)</td><td>Measurable gain over the model already in use</td></tr>
+    </table>
+
+    <h3>Business Value</h3>
+    <ul>
+      <li><strong>From reactive to proactive:</strong> Finds high-risk providers early enough to support pre-payment review.</li>
+      <li><strong>Better use of investigators:</strong> Points SIU effort at a 59.6K-provider queue that holds <strong>65.8% of total risk</strong>, which cuts time spent on low-yield reviews.</li>
+      <li><strong>Finds cross-carrier schemes:</strong> Shows patterns that exist only when data from many payers is combined.</li>
+      <li><strong>Defensible decisions:</strong> Every score comes with its reasons, so investigators have a clear, auditable place to start.</li>
+      <li><strong>Keeps improving:</strong> Investigation outcomes feed back in as new labels to raise precision over time.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Challenges</h2>
+    <ul>
+      <li><strong>Class imbalance (9.6:1):</strong> Used loss weighting instead of resampling, so risk-tier probabilities stay reliable.</li>
+      <li><strong>Label noise:</strong> Some unflagged providers may be offenders. Reduced this with two-step exclusion of suspected providers.</li>
+      <li><strong>Sampling bias:</strong> Stratified the sample and removed the sampling variable from the inputs. This makes the model learn behavior, not provider size.</li>
+      <li><strong>Data quality:</strong> Fixed claimant and bill ID collisions across customers. Dropped NPI features with high missing rates. Began per-carrier checks so features measure provider behavior, not a carrier's workflow.</li>
+      <li><strong>Overfitting:</strong> Added a train-validation gap limit (≤0.10) during tuning. This cut the gap by 22% with no loss in accuracy.</li>
+      <li><strong>Explainability:</strong> Chose SHAP over split-gain importance to give accurate reason codes for each provider.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Positioning: Where the Model Fits in the Business</h2>
+
+    <h3>Business Context</h3>
+    <p>The company reviews auto casualty medical bills for many insurance carriers, so its data shows how each provider bills across all of them. The model uses this pooled view to find risky providers that no single carrier can see alone.</p>
+
+    <h3>Place in the Claims and SIU Workflow</h3>
+    <table>
+      <tr><th>Step</th><th>What happens</th><th>Model's role</th></tr>
+      <tr><td>1. Bill intake</td><td>Providers send medical bills for auto injury claims</td><td>Source of billing behavior</td></tr>
+      <tr><td>2. Bill review</td><td>Bills are repriced, with review flags and endnotes</td><td>Review results become model features</td></tr>
+      <tr><td>3. Data warehouse</td><td>Bill lines from all carriers load into Snowflake</td><td>Monthly feature rebuild at provider TIN level</td></tr>
+      <tr class="highlight"><td>4. Risk scoring</td><td>Model scores every provider</td><td>Gives probability, risk tier and 10 reason codes</td></tr>
+      <tr><td>5. SIU triage</td><td>Investigators work the High and Elevated tiers first</td><td>Sets the order of the worklist</td></tr>
+      <tr><td>6. Investigation</td><td>Medical record review and corroboration</td><td>Reason codes give the starting point</td></tr>
+      <tr><td>7. Action</td><td>Pre-payment review, pended bills or referral</td><td>Supports earlier action, before payment</td></tr>
+      <tr><td>8. Feedback</td><td>Case results return as new labels</td><td>Retraining makes the model more precise</td></tr>
+    </table>
+
+    <h3>Who Uses the Output</h3>
+    <ul>
+      <li><strong>SIU investigators:</strong> Get a ranked worklist with the reasons behind each score.</li>
+      <li><strong>SIU managers:</strong> Use risk tiers to plan capacity and assign cases.</li>
+      <li><strong>Bill review and claims teams:</strong> Get risk signals for pre-payment review and pend decisions.</li>
+      <li><strong>Carrier clients:</strong> Get cross-carrier insight that their own data cannot give.</li>
+    </ul>
+
+    <h3>Strategic Value</h3>
+    <ul>
+      <li>Turns the company's multi-carrier data into a <strong>competitive advantage</strong> that single carriers cannot copy.</li>
+      <li>Moves fraud detection from <strong>manual and reactive</strong> to <strong>data-driven and proactive</strong>.</li>
+      <li>Adds a <strong>scalable, explainable</strong> decision-support layer to the existing bill review platform.</li>
+    </ul>
+
+    <div class="guardrail">
+      <strong>Guardrails:</strong> The model is a triage tool, not a decision tool. A high score is a lead, not proof of fraud. Investigators make every final decision after human review of the records.
+    </div>
+  </section>
+
+  <section>
+    <h2>Resume-Ready Bullets</h2>
+    <h3>One-liner</h3>
+    <div class="callout">
+      Built an explainable XGBoost fraud risk-ranking model on ~806M multi-carrier bill lines. It scores 298K providers, and its top decile has a 68.8% hit rate (7.3× lift), capturing 73% of SIU-flagged providers.
+    </div>
+    <h3>Bullets</h3>
+    <ul>
+      <li>Designed an end-to-end ML pipeline in Snowflake and Python. It ranks 377K+ medical providers by fraud, waste and abuse risk, using 5 years of multi-carrier billing data (~806M bill lines).</li>
+      <li>Engineered 203 behavioral features and cut them to 104 through data quality checks, collinearity pruning and 17 feature-set tests.</li>
+      <li>Delivered a tuned XGBoost model (PR-AUC 0.758, ROC-AUC 0.951) that beat the prior production model by 5.5%. It lets investigators catch ~90% of flagged providers by reviewing only 20% of the population.</li>
+      <li>Built SHAP-based reason codes, risk tiers, gated model promotion and automated QC. This turned model scores into an auditable, prioritized worklist for the SIU.</li>
+    </ul>
+  </section>
+
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smartphone Upgrade Propensity – Low-End to High-End Device Targeting</title>
+  <style>
+    :root {
+      --primary: #1f3a5f;
+      --accent: #2e75b6;
+      --light: #eef4fa;
+      --text: #222;
+      --muted: #555;
+      --border: #d0d7e2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 10.5pt;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 36px;
+      background: #fff;
+    }
+    h1 { color: var(--primary); font-size: 20pt; margin: 0 0 4px; }
+    .meta {
+      color: var(--muted);
+      padding-bottom: 8px;
+      margin-bottom: 6px;
+      border-bottom: 3px solid var(--accent);
+    }
+    .meta strong { color: var(--primary); }
+    h2 {
+      color: var(--primary);
+      font-size: 13pt;
+      margin: 22px 0 8px;
+      padding-left: 8px;
+      border-left: 4px solid var(--accent);
+    }
+    h3 { color: var(--accent); font-size: 11pt; margin: 14px 0 6px; }
+    p { margin: 6px 0; }
+    ul, ol { margin: 6px 0 6px 20px; padding: 0; }
+    li { margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 10pt; }
+    th { background: var(--primary); color: #fff; text-align: left; padding: 7px 9px; }
+    td { padding: 6px 9px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    tr:nth-child(even) td { background: var(--light); }
+    tr.highlight td { background: #dce9f5; font-weight: 600; }
+    .callout {
+      background: var(--light);
+      border-left: 4px solid var(--accent);
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-style: italic;
+    }
+    .guardrail {
+      background: #fdf0ef;
+      border-left: 4px solid #c0504d;
+      padding: 10px 14px;
+      margin: 10px 0;
+    }
+    section { page-break-inside: avoid; }
+    @media print {
+      body { padding: 0; font-size: 10pt; }
+      h2 { margin-top: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Smartphone Upgrade Propensity – Low-End to High-End Device Targeting</h1>
+  <div class="meta">
+    <strong>Tenarai</strong> &nbsp;|&nbsp; Data Scientist &nbsp;|&nbsp; 09/2025 – 11/2025
+  </div>
+
+  <section>
+    <h2>Project Overview</h2>
+    <p>Built a customer value management (CVM) targeting engine for a large African mobile operator. It finds prepaid subscribers who use low-end smartphones but show clear signs that they are ready to upgrade to a higher-end device. The engine combines device specifications, data usage, spending and location behavior to create a ranked list of upgrade candidates for device offers, financing plans and personalized campaigns.</p>
+    <table>
+      <tr><th>Flag</th><th>Condition</th><th>Meaning</th></tr>
+      <tr><td><strong>0</strong></td><td>Fewer than 2 of 4 readiness scenarios met</td><td>Not a priority for upgrade offers</td></tr>
+      <tr class="highlight"><td><strong>1</strong></td><td>2 or more of 4 readiness scenarios met</td><td>Strong upgrade candidate, target for campaigns</td></tr>
+    </table>
+    <p>The engine processed <strong>497,075</strong> active prepaid subscribers from a 24-week base and flagged <strong>147,305 (29.6%)</strong> as upgrade candidates.</p>
+  </section>
+
+  <section>
+    <h2>Key Features</h2>
+    <ul>
+      <li><strong>Four readiness scenarios:</strong> Device limitation, data hunger, affordability and location presence. Each gives a separate binary flag.</li>
+      <li><strong>Data-driven thresholds:</strong> Uses percentile benchmarks (P50, P75, P80) from the subscriber base, not fixed values, so the rules adjust as the base changes.</li>
+      <li><strong>Device capability check:</strong> Uses screen size, resolution, manufacturing year, RAM and internal storage to find handsets that limit modern app use.</li>
+      <li><strong>Affordability gate:</strong> Needs high total revenue, high data revenue and a high average daily balance together, so offers go only to subscribers who can pay.</li>
+      <li><strong>Explainable output:</strong> Every candidate has 4 visible flags, so campaign teams know why each subscriber qualified.</li>
+      <li><strong>Clean base:</strong> Only valid, active prepaid subscribers with more than 90 days of tenure are scored.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Technology &amp; Tools</h2>
+    <table>
+      <tr><th>Area</th><th>Tools</th></tr>
+      <tr><td>Language</td><td>Python, PySpark</td></tr>
+      <tr><td>Data processing</td><td>SQL, distributed data platform (subscriber, device, usage and network tables)</td></tr>
+      <tr><td>Method</td><td>Heuristic, rule-based segmentation with percentile thresholds and multi-scenario flag logic</td></tr>
+      <tr><td>Data domains</td><td>Device catalog (TAC/handset specs), data usage records, revenue and balance data, cell site (BTS) location data</td></tr>
+      <tr><td>Analysis</td><td>Percentile benchmarking, flag overlap analysis, subscriber profiling</td></tr>
+      <tr><td>Version control</td><td>Git, GitHub</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Problem Statement</h2>
+    <p>Smartphone adoption on the network was already high. But many subscribers still used low-end handsets with small screens, low RAM and little storage. These devices limited their use of video, social media and mobile money, which held back data revenue. The operator had no reliable way to find which low-end users were ready and able to upgrade. Broad device campaigns wasted budget on subscribers who could not afford a new phone or did not need one.</p>
+  </section>
+
+  <section>
+    <h2>Solution Approach</h2>
+    <ol>
+      <li><strong>Base creation:</strong> Built an active subscriber base from 24 weeks of data. Removed postpaid and enterprise lines, invalid MSISDN formats, records with no last-activity date and subscribers with 90 days or less of tenure.</li>
+      <li><strong>Device limitation scenario:</strong> Flagged a handset as limited if it met any one condition: screen size or resolution below the median, made in 2016 or earlier, less than 2 GB RAM or less than 32 GB storage.</li>
+      <li><strong>Data hunger scenario:</strong> Flagged subscribers above the 75th percentile on any one of these over the last 4 weeks: total data use, 4G data use, data sessions or active data days.</li>
+      <li><strong>Affordability scenario:</strong> Flagged subscribers only if all three measures were above the 75th percentile over the last 4 weeks: total revenue, data revenue and average daily balance.</li>
+      <li><strong>Location presence scenario:</strong> Measured how often a subscriber used the same main cell site over 24 weeks. A repeat count below the 80th percentile marked a mobile subscriber, who is more open to a device change.</li>
+      <li><strong>Final decision rule:</strong> Classified a subscriber as an upgrade candidate when at least 2 of the 4 scenarios were true.</li>
+      <li><strong>Validation &amp; profiling:</strong> Checked flag rates, overlaps and candidate profiles to confirm the output was sensible before handover.</li>
+      <li><strong>Delivery &amp; documentation:</strong> Wrote the scored output to an analytics table with a full data dictionary for the CVM and campaign teams.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Results &amp; Business Impact</h2>
+    <table>
+      <tr><th>Measure</th><th>Result</th><th>Business meaning</th></tr>
+      <tr><td>Subscribers scored</td><td><strong>497,075</strong></td><td>Full active prepaid base covered</td></tr>
+      <tr class="highlight"><td>Upgrade candidates</td><td><strong>147,305 (29.6%)</strong></td><td>A focused target list for device campaigns</td></tr>
+      <tr><td>Campaign base reduction</td><td><strong>~70%</strong> fewer contacts than a mass campaign</td><td>Lower campaign cost and less customer fatigue</td></tr>
+      <tr><td>Location presence flag</td><td><strong>348,914 (70.2%)</strong></td><td>Most subscribers show mobile usage patterns</td></tr>
+      <tr><td>Data hunger flag</td><td><strong>172,522 (34.7%)</strong></td><td>A large group needs more than their device gives</td></tr>
+      <tr><td>Device limitation flag</td><td><strong>77,967 (15.7%)</strong></td><td>Handsets that clearly restrict modern app use</td></tr>
+      <tr><td>Affordability flag</td><td><strong>37,769 (7.6%)</strong></td><td>High-value subscribers who can fund an upgrade</td></tr>
+    </table>
+
+    <h3>Business Value</h3>
+    <ul>
+      <li><strong>Targeted device sales:</strong> Device and financing offers go to subscribers with a real need and the means to pay.</li>
+      <li><strong>Data revenue growth:</strong> Better devices unlock video, social media and mobile money use, which lifts data consumption.</li>
+      <li><strong>Better customer experience:</strong> Heavy data users get devices that match their usage.</li>
+      <li><strong>Lower campaign waste:</strong> A list of about 30% of the base replaces broad, untargeted campaigns.</li>
+      <li><strong>Easy to explain:</strong> Clear flags let business teams trust the list and design offers by segment.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Challenges</h2>
+    <ul>
+      <li><strong>No labelled upgrade history:</strong> There was no past data on who upgraded after an offer, so a supervised model was not possible. Built an explainable heuristic approach instead.</li>
+      <li><strong>Choosing thresholds:</strong> Fixed cut-offs would go out of date. Used percentile benchmarks from the current base so thresholds adjust over time.</li>
+      <li><strong>Device data gaps:</strong> Some handsets had missing or inconsistent specs in the device catalog. Used several capability checks so one missing field did not block the flag.</li>
+      <li><strong>Balancing the scenarios:</strong> The location flag covers 70% of subscribers, while affordability covers under 8%. The 2-of-4 rule and a strict affordability gate kept the final list focused.</li>
+      <li><strong>Data quality:</strong> Fixed MSISDN format differences and removed inactive or new subscribers to keep the base reliable.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Positioning: Where the Solution Fits in the Business</h2>
+
+    <h3>Business Context</h3>
+    <p>For a mobile operator, device capability limits how much data a subscriber can use. Moving the right subscribers to better smartphones grows data revenue and customer value. The upgrade engine sits inside the operator's CVM analytics layer. It turns raw device, usage and revenue data into a target list for device and data campaigns.</p>
+
+    <h3>Place in the CVM Campaign Workflow</h3>
+    <table>
+      <tr><th>Step</th><th>What happens</th><th>Solution's role</th></tr>
+      <tr><td>1. Data capture</td><td>Network, billing and device systems log subscriber activity</td><td>Source of all attributes</td></tr>
+      <tr><td>2. Base preparation</td><td>Active prepaid subscribers are selected and cleaned</td><td>Defines who is eligible</td></tr>
+      <tr class="highlight"><td>3. Scenario flagging</td><td>Device, data, affordability and location rules run</td><td>Gives 4 readiness flags per subscriber</td></tr>
+      <tr class="highlight"><td>4. Candidate selection</td><td>2-of-4 rule sets the final flag</td><td>Creates the upgrade target list</td></tr>
+      <tr><td>5. Campaign design</td><td>CVM team builds device, financing and bundle offers</td><td>Flags guide the offer for each segment</td></tr>
+      <tr><td>6. Campaign delivery</td><td>Offers go out through SMS, app, retail and call center</td><td>Focuses spend on ready subscribers</td></tr>
+      <tr><td>7. Feedback</td><td>Upgrade and take-up results are logged</td><td>Builds labels for a future ML model</td></tr>
+    </table>
+
+    <h3>Who Uses the Output</h3>
+    <ul>
+      <li><strong>CVM and campaign teams:</strong> Build targeted device upgrade campaigns.</li>
+      <li><strong>Device and retail teams:</strong> Plan handset stock, bundles and financing offers.</li>
+      <li><strong>Data product teams:</strong> Pair new devices with data bundles to grow usage.</li>
+      <li><strong>Leadership:</strong> Track device mix and data revenue growth.</li>
+    </ul>
+
+    <div class="guardrail">
+      <strong>Guardrails:</strong> The flag shows upgrade readiness, not a confirmed purchase intent. Campaign teams apply business rules and contact rules before any offer goes out.
+    </div>
+  </section>
+
+<!--  <section>
+    <h2>Resume-Ready Bullets</h2>
+    <h3>One-liner</h3>
+    <div class="callout">
+      Built a smartphone upgrade targeting engine for a telecom operator that scored 497K prepaid subscribers on device, usage, affordability and mobility signals and identified 147K upgrade candidates for CVM campaigns.
+    </div>
+    <h3>Bullets</h3>
+    <ul>
+      <li>Designed a multi-scenario targeting framework that finds low-end smartphone users ready to upgrade, scoring 497K active prepaid subscribers from 24 weeks of data.</li>
+      <li>Built 4 readiness flags (device limitation, data hunger, affordability and location presence) from 15+ device, usage, revenue and cell site attributes.</li>
+      <li>Used percentile-based thresholds (P50, P75, P80) instead of fixed cut-offs, so the rules adjust as subscriber behavior changes.</li>
+      <li>Identified 147K upgrade candidates (29.6% of the base), cutting the campaign audience by ~70% compared with a mass campaign.</li>
+      <li>Delivered explainable, flag-level output with a full data dictionary, so CVM teams could design device, financing and data bundle offers by segment.</li>
+    </ul>
+  </section>-->
+
+</body>
+</html>

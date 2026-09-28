@@ -222,7 +222,7 @@
     </div>
   </section>
 
-  <section>
+  <!--<section>
     <h2>Future Work</h2>
     <ul>
       <li>Move from daily batch scoring to near real-time scoring for faster alerts.</li>
@@ -230,7 +230,7 @@
       <li>Add more data sources, such as weather, network events and device firmware versions.</li>
       <li>Test time-series models to predict cell-level quality drops before they happen.</li>
     </ul>
-  </section>
+  </section>-->
 
   <!--<section>
     <h2>Resume-Ready Bullets</h2>

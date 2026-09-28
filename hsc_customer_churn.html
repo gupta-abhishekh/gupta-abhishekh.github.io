@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Churn Prediction &amp; Retention Insights</title>
+  <style>
+    :root {
+      --primary: #1f3a5f;
+      --accent: #2e75b6;
+      --light: #eef4fa;
+      --text: #222;
+      --muted: #555;
+      --border: #d0d7e2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 10.5pt;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 36px;
+      background: #fff;
+    }
+    h1 { color: var(--primary); font-size: 20pt; margin: 0 0 4px; }
+    .meta {
+      color: var(--muted);
+      padding-bottom: 8px;
+      margin-bottom: 6px;
+      border-bottom: 3px solid var(--accent);
+    }
+    .meta strong { color: var(--primary); }
+    h2 {
+      color: var(--primary);
+      font-size: 13pt;
+      margin: 22px 0 8px;
+      padding-left: 8px;
+      border-left: 4px solid var(--accent);
+    }
+    h3 { color: var(--accent); font-size: 11pt; margin: 14px 0 6px; }
+    p { margin: 6px 0; }
+    ul, ol { margin: 6px 0 6px 20px; padding: 0; }
+    li { margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 10pt; }
+    th { background: var(--primary); color: #fff; text-align: left; padding: 7px 9px; }
+    td { padding: 6px 9px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    tr:nth-child(even) td { background: var(--light); }
+    tr.highlight td { background: #dce9f5; font-weight: 600; }
+    .callout {
+      background: var(--light);
+      border-left: 4px solid var(--accent);
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-style: italic;
+    }
+    .guardrail {
+      background: #fdf0ef;
+      border-left: 4px solid #c0504d;
+      padding: 10px 14px;
+      margin: 10px 0;
+    }
+    section { page-break-inside: avoid; }
+    @media print {
+      body { padding: 0; font-size: 10pt; }
+      h2 { margin-top: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Customer Churn Prediction &amp; Retention Insights</h1>
+  <div class="meta">
+    <strong>Hughes Systique</strong> &nbsp;|&nbsp; Data Scientist &nbsp;|&nbsp; 10/2018 – 11/2020
+  </div>
+
+  <section>
+    <h2>Project Overview</h2>
+    <p>Built a machine learning model that predicts which telecom customers are likely to leave (churn) in the next 90 days. The model uses 24 months of customer behavior, usage, billing and complaint data. It gives each customer a churn probability and a risk segment, so retention teams can act before the customer leaves.</p>
+    <table>
+      <tr><th>Label</th><th>Condition</th><th>Meaning</th></tr>
+      <tr><td><strong>0</strong></td><td>Customer stays active in the next 90 days</td><td>No retention action needed</td></tr>
+      <tr class="highlight"><td><strong>1</strong></td><td>Customer disconnects or ports out in the next 90 days</td><td>At risk, target for retention</td></tr>
+    </table>
+    <p>The model trained on ~850K customer records and ~180K complaint and support tickets. It scores the active customer base every month. The scores go to the CRM and to the BI team, which builds reports for the marketing and customer success teams.</p>
+  </section>
+
+  <section>
+    <h2>Key Features</h2>
+    <ul>
+      <li><strong>Churn risk scoring:</strong> Gives each customer a churn probability and a High / Medium / Low risk segment.</li>
+      <li><strong>Behavior-based features:</strong> Uses tenure, contract type, ARPU (average revenue per user), usage trends, recharge and payment patterns, plan changes and customer care calls.</li>
+      <li><strong>Complaint signals:</strong> Groups complaint text into categories such as billing, network and service. These categories become model inputs.</li>
+      <li><strong>Explainable drivers:</strong> Feature importance shows the main churn drivers for each segment, so teams know why a customer is at risk.</li>
+      <li><strong>Built for imbalance:</strong> Churners are only ~12% of customers. Class weights and threshold tuning keep the model focused on finding them.</li>
+      <li><strong>Statistical validation:</strong> Significance tests confirm churn drivers, and a control group measures the true effect of retention campaigns.</li>
+      <li><strong>Regular updates:</strong> Monthly scoring and quarterly retraining with new data keep predictions accurate.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Technology &amp; Tools</h2>
+    <table>
+      <tr><th>Area</th><th>Tools</th></tr>
+      <tr><td>Language</td><td>Python</td></tr>
+      <tr><td>ML libraries</td><td>scikit-learn, XGBoost</td></tr>
+      <tr><td>Algorithms</td><td>Logistic Regression, Decision Tree, Random Forest, SVM, XGBoost</td></tr>
+      <tr><td>Data handling</td><td>Pandas, NumPy, SQL</td></tr>
+      <tr><td>Text processing</td><td>TF-IDF and keyword rules for complaint categories</td></tr>
+      <tr><td>Statistical analysis</td><td>SciPy (chi-square tests, t-tests), control-group campaign testing</td></tr>
+      <tr><td>Evaluation &amp; tuning</td><td>Stratified k-fold CV, GridSearchCV, ROC-AUC, precision, recall, F1, confusion matrix, lift charts</td></tr>
+      <tr><td>Visualization (EDA)</td><td>Matplotlib, Seaborn</td></tr>
+      <tr><td>Version control</td><td>Git, GitHub</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Problem Statement</h2>
+    <p>Customer churn was reducing revenue and long-term customer value. Retention campaigns used broad rules, such as "contract ends next month," so offers went to many customers who would have stayed anyway. Customers who were really at risk were often found only after they had left. The business needed a data-driven way to find at-risk customers early, understand why they were leaving and target retention offers to the right people.</p>
+  </section>
+
+  <section>
+    <h2>Solution Approach</h2>
+    <ol>
+      <li><strong>Project planning:</strong> Agreed on goals, the churn definition and success metrics with business stakeholders. Managed the delivery plan and milestones.</li>
+      <li><strong>Data collection &amp; cleaning:</strong> Combined customer profile, usage, billing and complaint data from 4 source systems. Removed duplicates, fixed invalid values and handled missing data.</li>
+      <li><strong>Label creation:</strong> Defined churn as a disconnection or port-out within 90 days of the scoring date. Used only data from before the scoring date to avoid leakage.</li>
+      <li><strong>Exploratory &amp; statistical analysis:</strong> Found the main churn patterns. For example, churn was about 3× higher among month-to-month customers with 2 or more billing complaints. Used chi-square tests and t-tests to confirm which drivers were significant.</li>
+      <li><strong>Feature engineering:</strong> Built 60+ features, such as 3-month usage trends, drop in data use, days since last complaint, recharge gaps and payment delays. Selected the 30 strongest features.</li>
+      <li><strong>Modeling:</strong> Compared Logistic Regression, Decision Tree, Random Forest, SVM and XGBoost. Chose XGBoost for the best ROC-AUC and top-decile lift.</li>
+      <li><strong>Imbalance &amp; threshold tuning:</strong> Used class weights and tuned the decision threshold to balance recall against campaign cost.</li>
+      <li><strong>Evaluation:</strong> Measured ROC-AUC, precision, recall, F1, accuracy and the confusion matrix on a held-out time period. Used lift charts to show how many churners each risk segment captures.</li>
+      <li><strong>Actionable insights:</strong> Turned model scores into risk segments, churn drivers and suggested retention actions for each segment.</li>
+      <li><strong>Deployment &amp; maintenance:</strong> Worked with IT and software engineering teams to load monthly scores into the CRM. Shared scores and churn drivers with the BI team for business reporting. Retrained the model every quarter with new data.</li>
+      <li><strong>Validation &amp; documentation:</strong> Tested the model with a 10% control group that got no offers. Documented data preparation, feature engineering and model selection.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Results &amp; Business Impact</h2>
+    <table>
+      <tr><th>Metric</th><th>Result</th><th>Business meaning</th></tr>
+      <tr><td>ROC-AUC</td><td><strong>0.88</strong></td><td>Separates churners from loyal customers well</td></tr>
+      <tr><td>Recall (churners)</td><td><strong>78%</strong></td><td>Finds about 4 of every 5 customers who will leave</td></tr>
+      <tr><td>Precision (churners)</td><td><strong>55%</strong> (rule-based targeting: ~41%)</td><td>More offers go to customers who are really at risk</td></tr>
+      <tr><td>F1 score (churners)</td><td><strong>0.65</strong></td><td>Good balance of detection and wasted offers</td></tr>
+      <tr><td>Overall accuracy</td><td><strong>~90%</strong></td><td>Reliable across the full customer base</td></tr>
+      <tr><td>Top-decile lift</td><td><strong>3.8×</strong> (38% of churners in the top 10%)</td><td>A small target list reaches a large share of churners</td></tr>
+      <tr><td>Churn in targeted segment</td><td><strong>~14%</strong> lower than the control group</td><td>Retention offers really prevented churn</td></tr>
+      <tr><td>Campaign cost per retained customer</td><td><strong>~20%</strong> reduction</td><td>Less money spent on customers who would stay anyway</td></tr>
+    </table>
+
+    <h3>Business Value</h3>
+    <ul>
+      <li><strong>From reactive to proactive:</strong> Finds at-risk customers weeks before they leave.</li>
+      <li><strong>Smarter campaign spend:</strong> Offers go to high-risk, high-value customers instead of broad lists.</li>
+      <li><strong>Clear reasons for action:</strong> Churn drivers show teams whether to fix billing, network or service issues.</li>
+      <li><strong>Proven impact:</strong> Control-group testing showed the retention gain came from the model-driven campaigns.</li>
+      <li><strong>Stays accurate:</strong> Quarterly retraining keeps the model reliable as customer behavior changes.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Challenges</h2>
+    <ul>
+      <li><strong>Class imbalance:</strong> Churners were a small share of customers. Used class weights, threshold tuning and lift-based evaluation instead of accuracy alone.</li>
+      <li><strong>Unstructured complaint data:</strong> Complaint notes were free text with no standard format. Grouped them into categories with TF-IDF and keyword rules.</li>
+      <li><strong>Data leakage risk:</strong> Some fields changed after a customer decided to leave. Used only data from before the scoring date and validated on a later time period.</li>
+      <li><strong>Data from many systems:</strong> Customer IDs and formats did not match across sources. Built matching and validation steps before modeling.</li>
+      <li><strong>Proving real impact:</strong> A high score does not prove an offer worked. Used a control group to measure the true retention gain.</li>
+      <li><strong>Business trust:</strong> Teams were used to simple rules. Shared churn drivers and clear segment explanations to build confidence.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Positioning: Where the Model Fits in the Business</h2>
+
+    <h3>Business Context</h3>
+    <p>In telecom, keeping a customer costs much less than winning a new one. The retention team had a limited offer budget and could not contact every customer. The churn model sits between customer data and the retention teams. It tells the business who is at risk, why, and who to contact first.</p>
+
+    <h3>Place in the Customer Retention Workflow</h3>
+    <table>
+      <tr><th>Step</th><th>What happens</th><th>Model's role</th></tr>
+      <tr><td>1. Data capture</td><td>Billing, usage, CRM and complaint systems log customer activity</td><td>Source of model features</td></tr>
+      <tr><td>2. Data preparation</td><td>Data from all sources is combined and cleaned each month</td><td>Monthly feature build</td></tr>
+      <tr class="highlight"><td>3. Churn scoring</td><td>Model scores every active customer</td><td>Gives churn probability and risk segment</td></tr>
+      <tr class="highlight"><td>4. Insights &amp; targeting</td><td>Scores and churn drivers load into the CRM and go to the BI team for reports</td><td>Sets who to contact and with what offer</td></tr>
+      <tr><td>5. Retention action</td><td>Marketing and customer care run offers, calls and plan changes</td><td>Focuses budget on high-risk customers</td></tr>
+      <tr><td>6. Measurement</td><td>Targeted and control groups are compared</td><td>Shows the true retention gain</td></tr>
+      <tr><td>7. Feedback</td><td>Actual churn and campaign results are logged</td><td>Feeds quarterly retraining</td></tr>
+    </table>
+
+    <h3>Who Uses the Output</h3>
+    <ul>
+      <li><strong>Marketing teams:</strong> Build targeted retention campaigns from the risk segments.</li>
+      <li><strong>Customer success and care teams:</strong> Contact high-risk customers first, with the reasons behind their risk.</li>
+      <li><strong>Product and network teams:</strong> Use churn drivers to fix the issues that push customers away.</li>
+      <li><strong>Leadership:</strong> Track churn trends, revenue at risk and campaign return.</li>
+    </ul>
+
+    <div class="guardrail">
+      <strong>Guardrails:</strong> The model supports retention decisions. It does not make them. A high score means "contact this customer first." Teams choose the offer based on customer value and business rules.
+    </div>
+  </section>
+
+  <!--<section>
+    <h2>Resume-Ready Bullets</h2>
+    <h3>One-liner</h3>
+    <div class="callout">
+      Built an XGBoost churn prediction model on ~850K telecom customer records that reached 0.88 ROC-AUC and 3.8× top-decile lift, cutting churn by ~14% against a control group.
+    </div>
+    <h3>Bullets</h3>
+    <ul>
+      <li>Built a churn prediction model that flags telecom customers likely to leave within 90 days, trained on ~850K customer records and ~180K complaint tickets from 4 source systems.</li>
+      <li>Engineered 60+ behavioral, billing and usage features, including complaint categories from free text using TF-IDF and keyword rules, and selected the 30 strongest.</li>
+      <li>Compared Logistic Regression, Decision Tree, Random Forest, SVM and XGBoost models, and handled a 12% churn rate with class weights and threshold tuning.</li>
+      <li>Delivered an XGBoost model with 0.88 ROC-AUC and 78% recall, and raised targeting precision from ~41% (rule-based) to 55%.</li>
+      <li>Validated business impact with a 10% control group, showing ~14% lower churn in targeted customers and a ~20% lower campaign cost per retained customer.</li>
+      <li>Confirmed key churn drivers with chi-square tests and t-tests, and turned model outputs into risk segments and retention actions for marketing and customer care teams.</li>
+      <li>Worked with IT, software engineering and BI teams to load monthly scores into the CRM and business reports, and retrained the model every quarter with new data.</li>
+    </ul>
+  </section>-->
+
+</body>
+</html>

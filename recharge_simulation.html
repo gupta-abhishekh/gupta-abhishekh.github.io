@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recharge Simulation – Next Recharge Amount Prediction &amp; Next Best Offer Engine</title>
+  <style>
+    :root {
+      --primary: #1f3a5f;
+      --accent: #2e75b6;
+      --light: #eef4fa;
+      --text: #222;
+      --muted: #555;
+      --border: #d0d7e2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 10.5pt;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 36px;
+      background: #fff;
+    }
+    h1 { color: var(--primary); font-size: 20pt; margin: 0 0 4px; }
+    .meta {
+      color: var(--muted);
+      padding-bottom: 8px;
+      margin-bottom: 6px;
+      border-bottom: 3px solid var(--accent);
+    }
+    .meta strong { color: var(--primary); }
+    h2 {
+      color: var(--primary);
+      font-size: 13pt;
+      margin: 22px 0 8px;
+      padding-left: 8px;
+      border-left: 4px solid var(--accent);
+    }
+    h3 { color: var(--accent); font-size: 11pt; margin: 14px 0 6px; }
+    p { margin: 6px 0; }
+    ul, ol { margin: 6px 0 6px 20px; padding: 0; }
+    li { margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 10pt; }
+    th { background: var(--primary); color: #fff; text-align: left; padding: 7px 9px; }
+    td { padding: 6px 9px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    tr:nth-child(even) td { background: var(--light); }
+    tr.highlight td { background: #dce9f5; font-weight: 600; }
+    .callout {
+      background: var(--light);
+      border-left: 4px solid var(--accent);
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-style: italic;
+    }
+    .formula {
+      background: #f7f9fc;
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      margin: 8px 0;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 9.5pt;
+    }
+    .guardrail {
+      background: #fdf0ef;
+      border-left: 4px solid #c0504d;
+      padding: 10px 14px;
+      margin: 10px 0;
+    }
+    section { page-break-inside: avoid; }
+    @media print {
+      body { padding: 0; font-size: 10pt; }
+      h2 { margin-top: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Recharge Simulation – Next Recharge Amount Prediction &amp; Next Best Offer Engine</h1>
+  <div class="meta">
+    <strong>Tenarai</strong> &nbsp;|&nbsp; Sr. Data Scientist &nbsp;|&nbsp; 12/2025 – 04/2026
+  </div>
+
+  <section>
+    <h2>Project Overview</h2>
+    <p>Built a machine learning solution for a large African mobile operator. It predicts the recharge amount bucket that each prepaid subscriber is most likely to pick next. A multi-class Random Forest model gives each subscriber a bucket and a probability for that bucket. A rule-based Next Best Offer (NBO) engine then maps each subscriber to up to 3 personalized offers, priced just above their usual recharge amount.</p>
+    <table>
+      <tr><th>Class</th><th>Recharge bucket</th><th>Meaning</th><th>Share of base</th></tr>
+      <tr><td><strong>2</strong></td><td>0 – 4.99</td><td>Prefers small recharges</td><td>30.6%</td></tr>
+      <tr><td><strong>0</strong></td><td>5 – 9.99</td><td>Prefers medium recharges</td><td>35.0%</td></tr>
+      <tr><td><strong>1</strong></td><td>10+</td><td>Prefers large recharges</td><td>34.4%</td></tr>
+    </table>
+    <p>The solution scores <strong>1,512,877</strong> active prepaid subscribers. It maps at least one offer to <strong>1,193,147 (79%)</strong> of them and gives a revenue-potential value for every recommendation.</p>
+  </section>
+
+  <section>
+    <h2>Key Features</h2>
+    <ul>
+      <li><strong>Next recharge prediction:</strong> Predicts the bucket a subscriber will recharge in most often, with a probability score.</li>
+      <li><strong>Behavior-based features:</strong> Uses 33 features covering recharge amounts and frequency, bundle purchases, data and voice use, mobile money activity, digital channel use and device type.</li>
+      <li><strong>Personalized upsell offers:</strong> Maps up to 3 offers from the offer catalogue. Each one matches the subscriber's usual validity (daily, weekly or monthly) and preferred channel, at a price above what they usually pay.</li>
+      <li><strong>Revenue potential scoring:</strong> Calculates the expected revenue for the predicted recharge (NBA potential) and the extra 28-day revenue from each offer (NBO potential).</li>
+      <li><strong>Campaign-ready output:</strong> One output table per refresh holds the prediction, probability, 3 offers with their category, channel and potential, and a full data dictionary.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Technology &amp; Tools</h2>
+    <table>
+      <tr><th>Area</th><th>Tools</th></tr>
+      <tr><td>Language</td><td>Python, PySpark, SQL</td></tr>
+      <tr><td>ML library</td><td>Spark MLlib</td></tr>
+      <tr><td>Algorithm</td><td>Random Forest (hyperparameter-tuned, multi-class)</td></tr>
+      <tr><td>Feature work</td><td>Missing-value treatment, weekly 1st/99th percentile capping, ratio and change variables, categorical encoding</td></tr>
+      <tr><td>Feature selection</td><td>Correlation analysis, Random Forest variable importance, business review</td></tr>
+      <tr><td>Evaluation</td><td>Accuracy, weighted precision, recall and F1, confusion matrix, 70/30 train-test split</td></tr>
+      <tr><td>Offer engine</td><td>Rule-based NBO logic on the offer catalogue and channel preference output</td></tr>
+      <tr><td>Version control</td><td>Git, GitHub</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Problem Statement</h2>
+    <p>Prepaid subscribers recharge often, but in very different amounts and cycles. The operator's recharge and bundle offers were not linked to each subscriber's real recharge behavior. Offers priced too high were ignored, and offers priced too low gave away revenue. The CVM team needed to know how much each subscriber was likely to recharge next and which offer could move them to a slightly higher spend, on the channel they actually use.</p>
+  </section>
+
+  <section>
+    <h2>Solution Approach</h2>
+    <ol>
+      <li><strong>Base creation:</strong> Selected active prepaid subscribers with activity in the last 90 days and a tenure of at least 90 days. Removed postpaid and enterprise lines, invalid MSISDN formats and records where days since last activity was greater than tenure.</li>
+      <li><strong>Bucket design:</strong> Ran EDA on 3 months of recharge transactions to study the amount distribution. Created 3 balanced buckets: 0–4.99, 5–9.99 and 10+.</li>
+      <li><strong>Target (event) definition:</strong> Used a 3-month observation window and a 1-week response window after it. For each subscriber, counted recharges per bucket in the response week and set the most frequent bucket as the target.</li>
+      <li><strong>Data preparation:</strong> Treated missing values and capped outliers at the 1st and 99th percentiles for each week. Built derived, ratio and change variables across months.</li>
+      <li><strong>Feature selection:</strong> Cut the feature set to 33 attributes using correlation, Random Forest importance and business input. Recent recharge amount history was the strongest signal: maximum recharge amounts in the last 3 months made up 36% of total importance.</li>
+      <li><strong>Modeling:</strong> Tried several feature sets and techniques. A hyperparameter-tuned Random Forest performed best and was selected, trained on a 70% sample and tested on the other 30%.</li>
+      <li><strong>NBA potential:</strong> Set the expected value of the next recharge as the subscriber's most frequent recharge amount in the last month.</li>
+      <li><strong>NBO mapping:</strong> Derived the preferred validity from the average recharge gap over a rolling 12 weeks (daily ≤2 days, weekly ≤10 days, monthly >10 days). Set the preferred price as the highest of the cohort maximum, 3-month average, 1-month average and mode. Picked the top 3 catalogue offers with the same validity, a higher price and the subscriber's preferred channel.</li>
+      <li><strong>NBO potential:</strong> Measured each offer's extra revenue, normalized to 28 days, with a minimum of zero.</li>
+      <li><strong>Delivery &amp; documentation:</strong> Wrote the scored output to the analytics layer with a full data dictionary and walked stakeholders through the method.</li>
+    </ol>
+    <div class="formula">
+      NBO potential = max(0, (Offer price ÷ Offer validity × 28) − (Preferred price ÷ Preferred validity × 28))
+    </div>
+  </section>
+
+  <section>
+    <h2>Results &amp; Business Impact</h2>
+    <table>
+      <tr><th>Metric</th><th>Result</th><th>Business meaning</th></tr>
+      <tr><td>Test accuracy</td><td><strong>60.9%</strong> (random guess on 3 balanced classes: ~33%)</td><td>Predicts the right bucket about 1.8× as often as chance</td></tr>
+      <tr><td>Test F1 (weighted)</td><td><strong>60.9%</strong> (precision 61.2%, recall 60.9%)</td><td>Balanced performance across all 3 buckets</td></tr>
+      <tr><td>Train vs. test gap</td><td><strong>2.3 points</strong> (63.1% → 60.9%)</td><td>Model generalizes well and is not overfit</td></tr>
+      <tr><td>Full-base scoring accuracy</td><td><strong>62.5%</strong> on 1.51M subscribers</td><td>Stable results at production scale</td></tr>
+      <tr class="highlight"><td>Exact or one bucket off</td><td><strong>~93%</strong> of test predictions</td><td>Only ~7% of predictions confuse small and large recharges</td></tr>
+      <tr><td>Best-predicted bucket</td><td><strong>10+</strong>: ~70% recall, ~69% precision</td><td>High-value recharge customers are found most reliably</td></tr>
+      <tr><td>Offer coverage</td><td><strong>1,193,147 (79%)</strong> subscribers mapped to offers</td><td>Most of the base gets personalized upsell offers</td></tr>
+    </table>
+
+    <h3>Business Value</h3>
+    <ul>
+      <li><strong>Right-sized offers:</strong> Offers match each subscriber's real recharge amount and cycle, so they are more likely to be accepted.</li>
+      <li><strong>Controlled upsell:</strong> Every offer is priced just above the subscriber's usual spend, which lifts ARPU without pushing customers away.</li>
+      <li><strong>Revenue-based prioritization:</strong> NBA and NBO potential values let the CVM team rank subscribers and offers by expected revenue gain.</li>
+      <li><strong>Channel-aware delivery:</strong> Offers go out on each subscriber's preferred channel, which improves reach and response.</li>
+      <li><strong>Protects high-value customers:</strong> The 10+ bucket is predicted most reliably, so high-spend subscribers get suitable offers.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Challenges</h2>
+    <ul>
+      <li><strong>Noisy, short-term behavior:</strong> Recharge amounts change week to week, and the target used a 1-week window. Focused on recent recharge history, which gave the strongest signal.</li>
+      <li><strong>Middle-bucket confusion:</strong> The 5–9.99 bucket overlaps with both neighbors and had the lowest precision (~54%). Showed stakeholders that most errors were one bucket off, which is low-risk for offer pricing.</li>
+      <li><strong>Outliers in amounts:</strong> Very large recharges distorted the averages. Capped values at the 1st and 99th percentiles for each week.</li>
+      <li><strong>Setting the preferred price:</strong> A single average understated what a subscriber would pay. Used the highest of 4 measures so offers aimed at a realistic, slightly higher spend.</li>
+      <li><strong>Offer catalogue gaps:</strong> 21% of subscribers had no offer that matched their validity, price and channel. Kept the rules strict instead of mapping offers that don't fit, and reported the gap to the offer team.</li>
+      <li><strong>Data quality:</strong> Fixed MSISDN format differences and removed inactive, new and inconsistent records before modeling.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Positioning: Where the Solution Fits in the Business</h2>
+
+    <h3>Business Context</h3>
+    <p>For a prepaid operator, recharges are the main source of revenue. Small, well-timed increases in recharge value across a large base add up to large revenue gains. The Recharge Simulation engine sits in the operator's CVM analytics layer as the "how much" and "what offer" decision layer for recharge campaigns.</p>
+
+    <h3>Place in the CVM Campaign Workflow</h3>
+    <table>
+      <tr><th>Step</th><th>What happens</th><th>Solution's role</th></tr>
+      <tr><td>1. Data capture</td><td>Recharge, usage, bundle and mobile money systems log activity</td><td>Source of model features</td></tr>
+      <tr><td>2. Base preparation</td><td>Active prepaid subscribers are selected and cleaned</td><td>Defines who is eligible</td></tr>
+      <tr class="highlight"><td>3. Recharge prediction</td><td>Random Forest predicts the next recharge bucket</td><td>Gives bucket, probability and NBA potential</td></tr>
+      <tr class="highlight"><td>4. Offer mapping</td><td>NBO rules match catalogue offers to validity, price and channel</td><td>Gives top 3 offers with revenue potential</td></tr>
+      <tr><td>5. Campaign design</td><td>CVM team ranks subscribers and builds campaigns</td><td>Potential values set the priority</td></tr>
+      <tr><td>6. Campaign delivery</td><td>Offers go out through USSD, SMS, app and mobile money</td><td>Each subscriber gets offers on their preferred channel</td></tr>
+      <tr><td>7. Feedback</td><td>Offer take-up and recharge results are logged</td><td>Feeds model refresh and offer tuning</td></tr>
+    </table>
+
+    <h3>Who Uses the Output</h3>
+    <ul>
+      <li><strong>CVM and campaign teams:</strong> Run personalized recharge and bundle upsell campaigns.</li>
+      <li><strong>Offer and pricing teams:</strong> Find gaps in the offer catalogue and design new price points.</li>
+      <li><strong>Revenue and commercial teams:</strong> Track recharge value growth and campaign revenue.</li>
+      <li><strong>Leadership:</strong> See the expected revenue gain from recharge campaigns.</li>
+    </ul>
+
+    <div class="guardrail">
+      <strong>Guardrails:</strong> The model predicts the most likely recharge bucket, not a guaranteed amount. Offers are recommendations. Campaign teams apply contact rules and business rules before any offer goes out.
+    </div>
+  </section>
+
+  <!--<section>
+    <h2>Resume-Ready Bullets</h2>
+    <h3>One-liner</h3>
+    <div class="callout">
+      Built a multi-class Random Forest model and Next Best Offer engine that predicts the next recharge amount for 1.51M prepaid telecom subscribers and maps personalized upsell offers to 79% of the base.
+    </div>
+    <h3>Bullets</h3>
+    <ul>
+      <li>Built a 3-class Random Forest model that predicts each prepaid subscriber's next recharge amount bucket, scoring 1.51M active subscribers.</li>
+      <li>Designed balanced recharge buckets from EDA on 3 months of transactions, and defined the target as the most frequent bucket in a 1-week response window.</li>
+      <li>Engineered and selected 33 features across recharge, bundle, data, voice and mobile money behavior, using correlation, variable importance and business input.</li>
+      <li>Delivered 60.9% test accuracy (1.8× the random baseline) with only a 2.3-point train-test gap. About 93% of predictions were exact or one bucket off.</li>
+      <li>Built a rule-based Next Best Offer engine that maps up to 3 offers per subscriber by validity, price and preferred channel, reaching 1.19M subscribers (79%).</li>
+      <li>Created NBA and NBO revenue-potential metrics, normalized to 28 days, so CVM teams could rank campaigns by expected revenue gain.</li>
+    </ul>
+  </section>-->
+
+</body>
+</html>

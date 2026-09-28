@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Call Quality Score (MOS) Prediction &amp; Cell-Level Prioritization</title>
+  <style>
+    :root {
+      --primary: #1f3a5f;
+      --accent: #2e75b6;
+      --light: #eef4fa;
+      --text: #222;
+      --muted: #555;
+      --border: #d0d7e2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 10.5pt;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 36px;
+      background: #fff;
+    }
+    h1 { color: var(--primary); font-size: 20pt; margin: 0 0 4px; }
+    .meta {
+      color: var(--muted);
+      padding-bottom: 8px;
+      margin-bottom: 6px;
+      border-bottom: 3px solid var(--accent);
+    }
+    .meta strong { color: var(--primary); }
+    h2 {
+      color: var(--primary);
+      font-size: 13pt;
+      margin: 22px 0 8px;
+      padding-left: 8px;
+      border-left: 4px solid var(--accent);
+    }
+    h3 { color: var(--accent); font-size: 11pt; margin: 14px 0 6px; }
+    p { margin: 6px 0; }
+    ul, ol { margin: 6px 0 6px 20px; padding: 0; }
+    li { margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 10pt; }
+    th { background: var(--primary); color: #fff; text-align: left; padding: 7px 9px; }
+    td { padding: 6px 9px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    tr:nth-child(even) td { background: var(--light); }
+    tr.highlight td { background: #fff4d6; font-weight: 600; }
+    .callout {
+      background: var(--light);
+      border-left: 4px solid var(--accent);
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-style: italic;
+    }
+    .guardrail {
+      background: #fdf0ef;
+      border-left: 4px solid #c0504d;
+      padding: 10px 14px;
+      margin: 10px 0;
+    }
+    /* Estimated values: verify and replace with your real figures */
+    .est { background: #ffe97a; padding: 0 2px; border-radius: 2px; }
+    .est-note {
+      background: #fff8d0;
+      border: 1px dashed #c9a400;
+      padding: 8px 12px;
+      margin: 10px 0;
+      font-size: 9.5pt;
+    }
+    section { page-break-inside: avoid; }
+    @media print {
+      body { padding: 0; font-size: 10pt; }
+      h2 { margin-top: 16px; }
+      .est { background: none; padding: 0; }
+      .est-note { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Call Quality Score (MOS) Prediction &amp; Cell-Level Prioritization</h1>
+  <div class="meta">
+    <strong>Capgemini</strong> &nbsp;|&nbsp; Data Scientist &nbsp;|&nbsp; 12/2020 – 06/2022
+  </div>
+
+  <!--<div class="est-note">
+    <strong>Note (hidden when printed):</strong> Highlighted items are estimates or assumed tools. Replace each one with your real figure, or remove it, before you use this document.
+  </div>-->
+
+  <section>
+    <h2>Project Overview</h2>
+    <p>Built and deployed a machine learning classification model on Azure that predicts poor voice call quality. Call quality is measured by the Mean Opinion Score (MOS), a 1–5 scale of how users rate a call. The model uses network and call data to flag calls that need inspection.</p>
+    <table>
+      <tr><th>Label</th><th>Condition</th><th>Meaning</th></tr>
+      <tr><td><strong>0</strong></td><td>MOS ≥ 3</td><td>Good voice quality, no action needed</td></tr>
+      <tr class="highlight"><td><strong>1</strong></td><td>MOS &lt; 3</td><td>Poor voice quality, needs inspection</td></tr>
+    </table>
+    <p>Each flagged call is mapped to the <strong>serving cell (cell_id)</strong> that carried it. A dashboard ranks cells from the highest to the lowest number of label 1 calls. This turns thousands of call-level predictions into a short, prioritized list of network locations to fix.</p>
+    <p>The model trained on <span class="est">~12M</span> historical call records and scores <span class="est">~400K</span> calls per day across <span class="est">~2,500</span> cells.</p>
+  </section>
+
+  <section>
+    <h2>Key Features</h2>
+    <ul>
+      <li><strong>Poor-quality call detection:</strong> Classifies each call as good (0) or needs inspection (1), with a tuned probability threshold.</li>
+      <li><strong>Cell-level ranking:</strong> Maps each call to its serving cell_id and ranks cells by the count of label 1 calls, so engineers start with the cells that affect the most users.</li>
+      <li><strong>Network-aware features:</strong> Uses jitter, packet loss, latency, codec, network type, device type, cell load and time of day.</li>
+      <li><strong>Explainable drivers:</strong> Feature importance shows the top causes of poor quality, such as packet loss or peak-hour congestion.</li>
+      <li><strong>Built for imbalance:</strong> Poor calls are only <span class="est">~11%</span> of traffic. Class weights and threshold tuning keep the model focused on finding them.</li>
+      <li><strong>Cloud deployment:</strong> Model hosted on Azure, with daily batch scoring and results sent to the monitoring dashboard.</li>
+      <li><strong>Monitoring &amp; retraining:</strong> Tracks recall, precision and data drift. Triggers retraining when performance drops below set limits.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Technology &amp; Tools</h2>
+    <table>
+      <tr><th>Area</th><th>Tools</th></tr>
+      <tr><td>Language</td><td>Python</td></tr>
+      <tr><td>ML libraries</td><td>scikit-learn, <span class="est">XGBoost</span></td></tr>
+      <tr><td>Algorithms</td><td>Logistic Regression, Decision Tree, Random Forest, <span class="est">Gradient Boosting</span></td></tr>
+      <tr><td>Data handling</td><td>Pandas, NumPy, SQL</td></tr>
+      <tr><td>EDA &amp; visualization</td><td>Matplotlib, Seaborn</td></tr>
+      <tr><td>Dashboard</td><td><span class="est">Power BI</span> (cell-level ranking of poor-quality calls)</td></tr>
+      <tr><td>Evaluation &amp; tuning</td><td>Stratified k-fold CV, GridSearchCV, ROC-AUC, precision, recall, F1, confusion matrix</td></tr>
+      <tr><td>Cloud &amp; deployment</td><td>Azure (<span class="est">Azure Machine Learning</span>, <span class="est">Azure Blob Storage</span>)</td></tr>
+      <tr><td>Version control</td><td>Git, GitHub</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Problem Statement</h2>
+    <p>Poor call quality was often found only after users complained. The network team relied on fixed rules, such as "packet loss above X%", that missed many bad calls and raised false alarms. With thousands of cells in the network, engineers had no objective way to decide which cells to inspect first. The team needed a data-driven way to predict poor-quality calls early and point engineers to the cells that caused the most impact.</p>
+  </section>
+
+  <section>
+    <h2>Solution Approach</h2>
+    <ol>
+      <li><strong>Data collection &amp; cleaning:</strong> Gathered call detail and network data from <span class="est">3</span> sources. Removed duplicates, fixed invalid values and handled missing data to keep the dataset complete and reliable.</li>
+      <li><strong>Label creation:</strong> Turned the MOS value into a binary target: 0 for MOS ≥ 3 (good) and 1 for MOS &lt; 3 (needs inspection).</li>
+      <li><strong>Exploratory data analysis:</strong> Used visual analysis to find patterns. For example, poor quality rose sharply at peak hours and above <span class="est">~2%</span> packet loss.</li>
+      <li><strong>Feature engineering:</strong> Built <span class="est">40+</span> features, such as jitter-to-latency ratios, peak-hour flags, rolling cell-level averages and grouped device and codec categories. Selected the <span class="est">25</span> strongest features.</li>
+      <li><strong>Modeling:</strong> Compared Logistic Regression, Decision Tree, Random Forest and Gradient Boosting. Chose <span class="est">Random Forest</span> for the best balance of recall, precision and interpretability.</li>
+      <li><strong>Imbalance &amp; threshold tuning:</strong> Used class weights and tuned the decision threshold to catch more poor calls while keeping false alarms low.</li>
+      <li><strong>Evaluation:</strong> Measured ROC-AUC, precision, recall, F1 and the confusion matrix on a held-out test set. Focused on recall for label 1, because a missed poor call costs more than a false alarm.</li>
+      <li><strong>Cell-level aggregation &amp; dashboard:</strong> Joined each scored call to its serving cell_id. Counted label 1 calls per cell and ranked cells from highest to lowest. Showed the <span class="est">poor-call rate (% of label 1 calls)</span> next to the count, so small cells with severe faults were not hidden by busy cells.</li>
+      <li><strong>Deployment &amp; monitoring:</strong> Deployed on Azure with daily batch scoring and a daily dashboard refresh. Set up drift and performance checks and <span class="est">monthly</span> retraining when needed.</li>
+      <li><strong>Documentation:</strong> Wrote reports on the methods, findings and recommendations for technical and business stakeholders.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Results &amp; Business Impact</h2>
+    <table>
+      <tr><th>Metric</th><th>Result</th><th>Business meaning</th></tr>
+      <tr><td>ROC-AUC</td><td><strong><span class="est">0.92</span></strong></td><td>Separates good and poor calls very well</td></tr>
+      <tr><td>Recall (label 1)</td><td><strong><span class="est">84%</span></strong> (rule-based baseline: <span class="est">~55%</span>)</td><td>Catches most poor-quality calls</td></tr>
+      <tr><td>Precision (label 1)</td><td><strong><span class="est">78%</span></strong></td><td>About 4 of every 5 flagged calls really need inspection</td></tr>
+      <tr><td>F1 score (label 1)</td><td><strong><span class="est">0.81</span></strong></td><td>Good balance of detection and false alarms</td></tr>
+      <tr><td>Overall accuracy</td><td><strong><span class="est">~95%</span></strong></td><td>Reliable across all calls</td></tr>
+      <tr><td>Cell concentration</td><td><strong>Top <span class="est">10%</span></strong> of cells held <span class="est">~60%</span> of label 1 calls</td><td>Fixing a small set of cells solves most of the problem</td></tr>
+      <tr><td>Customer complaints</td><td><strong><span class="est">~18%</span></strong> reduction</td><td>Issues fixed before users noticed</td></tr>
+      <tr><td>Time to detect issues</td><td><strong><span class="est">~1 day → ~2 hours</span></strong></td><td>Faster fixes and less user impact</td></tr>
+      <tr><td>Manual inspection effort</td><td><strong><span class="est">~35%</span></strong> reduction</td><td>Engineers inspect ranked cells, not random samples</td></tr>
+    </table>
+
+    <h3>Business Value</h3>
+    <ul>
+      <li><strong>From reactive to proactive:</strong> Finds poor-quality calls early, before complaints come in.</li>
+      <li><strong>Action at the right level:</strong> Cell-level ranking turns call predictions into a clear list of network locations to fix.</li>
+      <li><strong>Better use of engineers:</strong> Focuses field and network work on the cells with the highest user impact.</li>
+      <li><strong>Stronger SLA compliance:</strong> Earlier fixes help meet service quality targets.</li>
+      <li><strong>Clear root causes:</strong> Feature drivers show why quality drops, which guides network changes.</li>
+      <li><strong>Stays accurate:</strong> Monitoring and retraining keep the model reliable as the network changes.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Challenges</h2>
+    <ul>
+      <li><strong>Class imbalance:</strong> Poor calls were a small share of traffic. Used class weights and threshold tuning instead of relying on accuracy alone.</li>
+      <li><strong>Data quality:</strong> Call records had missing values and inconsistent fields across sources. Built cleaning and validation steps before modeling.</li>
+      <li><strong>Call-to-cell mapping:</strong> Some calls had missing or changed cell_ids because of handovers between cells. Mapped each call to its primary serving cell and excluded records with no valid cell_id.</li>
+      <li><strong>Volume bias in ranking:</strong> Busy cells naturally have more label 1 calls. Showed the poor-call rate with the count, so engineers could see both user impact and fault severity.</li>
+      <li><strong>Many related network factors:</strong> Jitter, latency and packet loss move together. Removed highly correlated features to keep the model stable and easy to explain.</li>
+      <li><strong>Threshold choice:</strong> Too low a threshold caused alarm fatigue; too high missed bad calls. Agreed the final threshold with the network team.</li>
+      <li><strong>Data drift:</strong> Network upgrades and new devices changed the data over time. Added drift checks and scheduled retraining.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Positioning: Where the Model Fits in the Business</h2>
+
+    <h3>Business Context</h3>
+    <p>Voice call quality directly affects customer satisfaction and SLA commitments. The network operations team manages thousands of cells, but cannot inspect each one. The model and its cell-ranking dashboard sit between raw call data and the operations team as an early-warning layer that tells engineers which cells to fix first.</p>
+
+    <h3>Place in the Network Operations Workflow</h3>
+    <table>
+      <tr><th>Step</th><th>What happens</th><th>Model's role</th></tr>
+      <tr><td>1. Call data capture</td><td>Network systems log call and quality metrics with the serving cell_id</td><td>Source of model features</td></tr>
+      <tr><td>2. Data storage</td><td>Records load into Azure storage and SQL tables</td><td>Daily feature build</td></tr>
+      <tr class="highlight"><td>3. Quality prediction</td><td>Model scores each call</td><td>Gives probability and 0/1 label</td></tr>
+      <tr class="highlight"><td>4. Cell ranking</td><td>Label 1 calls are grouped by cell_id and ranked from highest to lowest count</td><td>Sets the inspection priority by cell</td></tr>
+      <tr><td>5. Inspection</td><td>Engineers check the top-ranked cells and their peak time windows</td><td>Feature drivers point to the likely cause</td></tr>
+      <tr><td>6. Network action</td><td>Capacity, routing, antenna or configuration changes</td><td>Fixes issues before more users are affected</td></tr>
+      <tr><td>7. Feedback</td><td>New MOS results and inspection outcomes are logged</td><td>Confirms the fix and feeds retraining</td></tr>
+    </table>
+
+    <h3>Who Uses the Output</h3>
+    <ul>
+      <li><strong>Network operations engineers:</strong> Get a ranked list of cells to inspect, with the likely causes.</li>
+      <li><strong>Operations managers:</strong> Track cell-level quality trends and plan field team capacity.</li>
+      <li><strong>Customer service teams:</strong> Get early notice of areas likely to raise complaints.</li>
+      <li><strong>Leadership:</strong> Get a clearer view of service quality and SLA risk.</li>
+    </ul>
+
+    <div class="guardrail">
+      <strong>Guardrails:</strong> The model is an early-warning tool, not a replacement for network diagnostics. A high cell rank means "inspect this cell first." Engineers confirm the root cause before they change the network.
+    </div>
+  </section>
+
+  <section>
+    <h2>Future Work</h2>
+    <ul>
+      <li>Move from daily batch scoring to near real-time scoring for faster alerts.</li>
+      <li>Rank cells with a combined score of poor-call count and rate, weighted by user impact.</li>
+      <li>Add more data sources, such as weather, network events and device firmware versions.</li>
+      <li>Test time-series models to predict cell-level quality drops before they happen.</li>
+    </ul>
+  </section>
+
+  <!--<section>
+    <h2>Resume-Ready Bullets</h2>
+    <h3>One-liner</h3>
+    <div class="callout">
+      Built and deployed an Azure-hosted classification model that flags poor-quality voice calls (MOS &lt; 3) and ranks serving cells by poor-call volume, reaching <span class="est">0.92</span> ROC-AUC and <span class="est">84%</span> recall and cutting customer complaints by <span class="est">~18%</span>.
+    </div>
+    <h3>Bullets</h3>
+    <ul>
+      <li>Built a binary classification model that flags voice calls with MOS &lt; 3 for inspection, trained on <span class="est">~12M</span> call records and scoring <span class="est">~400K</span> calls per day.</li>
+      <li>Engineered <span class="est">40+</span> network and call features (jitter, packet loss, latency, codec, peak-hour flags) after cleaning and EDA of multi-source call data.</li>
+      <li>Compared Logistic Regression, Decision Tree, Random Forest and Gradient Boosting models, and handled class imbalance with class weights and threshold tuning.</li>
+      <li>Raised poor-call recall from <span class="est">~55%</span> (rule-based) to <span class="est">84%</span> at <span class="est">78%</span> precision (ROC-AUC <span class="est">0.92</span>).</li>
+      <li>Built a dashboard that maps predictions to serving cell_ids and ranks <span class="est">~2,500</span> cells by label 1 call count, showing that the top <span class="est">10%</span> of cells held <span class="est">~60%</span> of poor calls.</li>
+      <li>Deployed the model on Azure with daily batch scoring, drift monitoring and scheduled retraining, cutting issue detection time from <span class="est">~1 day to ~2 hours</span>.</li>
+      <li>Reduced customer complaints by <span class="est">~18%</span> and manual inspection effort by <span class="est">~35%</span> by focusing engineers on the highest-impact cells.</li>
+    </ul>
+  </section>-->
+
+</body>
+</html>

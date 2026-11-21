@@ -47,7 +47,7 @@
     th { background: var(--primary); color: #fff; text-align: left; padding: 7px 9px; }
     td { padding: 6px 9px; border-bottom: 1px solid var(--border); vertical-align: top; }
     tr:nth-child(even) td { background: var(--light); }
-    tr.highlight td { background: #fff4d6; font-weight: 600; }
+    tr.highlight td { background: none; font-weight: 600; }
     .callout {
       background: var(--light);
       border-left: 4px solid var(--accent);
@@ -62,7 +62,7 @@
       margin: 10px 0;
     }
     /* Estimated values: verify and replace with your real figures */
-    .est { background: #ffe97a; padding: 0 2px; border-radius: 2px; }
+    .est { background: none; padding: 0; border-radius: 0; }
     .est-note {
       background: #fff8d0;
       border: 1px dashed #c9a400;
@@ -99,7 +99,7 @@
   <section>
     <h2>Key Features</h2>
     <ul>
-      <li><strong>Natural language to SQL:</strong> Converts plain-English questions into valid Synapse SQL across <span class="est">7+</span> tables and views in <span class="est">8</span> finance subject areas.</li>
+      <li><strong>Natural language to SQL:</strong> Converts plain-English questions into valid Synapse SQL across <span class="est">7+</span> tables and views in <span class="est">5</span> subject areas.</li>
       <li><strong>RAG-grounded answers:</strong> Retrieves schema details, KPI definitions and a finance glossary from a vector index. This keeps answers correct for domain terms such as "net revenue" or "YTD variance".</li>
       <li><strong>Native Teams experience:</strong> Adaptive Cards show summaries, data tables and follow-up suggestions. Users need no new tool or separate login.</li>
       <li><strong>Enterprise security:</strong> RBAC through Microsoft Entra ID groups, plus row-level security (RLS) in Synapse, so each user sees only their own data.</li>
